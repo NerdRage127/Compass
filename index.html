@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Compass - Blue Ridge Navigator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Compass Navigator</h1>
+            <p class="subtitle">Blue Ridge, Georgia</p>
+        </header>
+
+        <div class="compass-container">
+            <div class="compass" id="compass">
+                <div class="compass-rose">
+                    <div class="direction-marker north">N</div>
+                    <div class="direction-marker east">E</div>
+                    <div class="direction-marker south">S</div>
+                    <div class="direction-marker west">W</div>
+                </div>
+                <div class="needle" id="needle"></div>
+                <div class="center-dot"></div>
+            </div>
+            <div class="bearing-info">
+                <div class="info-item">
+                    <span class="label">Direction:</span>
+                    <span class="value" id="direction">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Bearing:</span>
+                    <span class="value" id="bearing">--°</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Distance:</span>
+                    <span class="value" id="distance">--</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="control-section">
+                <label for="target-select">Select Destination:</label>
+                <select id="target-select">
+                    <option value="north">True North</option>
+                    <optgroup label="Blue Ridge Points of Interest">
+                        <option value="hospital">Blue Ridge Medical Center</option>
+                        <option value="downtown">Downtown Blue Ridge</option>
+                        <option value="lake">Lake Blue Ridge</option>
+                        <option value="scenic-railway">Blue Ridge Scenic Railway</option>
+                        <option value="toccoa-river">Toccoa River</option>
+                    </optgroup>
+                    <option value="custom">Custom Location</option>
+                </select>
+            </div>
+
+            <div id="custom-location" class="control-section" style="display: none;">
+                <label>Enter Coordinates:</label>
+                <div class="coordinate-inputs">
+                    <input type="number" id="custom-lat" placeholder="Latitude" step="0.000001" min="-90" max="90">
+                    <input type="number" id="custom-lng" placeholder="Longitude" step="0.000001" min="-180" max="180">
+                    <button id="set-custom" class="btn">Set Location</button>
+                </div>
+                <div class="map-link">
+                    <a href="https://www.google.com/maps" target="_blank" rel="noopener">
+                        📍 Open Map to Get Coordinates
+                    </a>
+                </div>
+            </div>
+
+            <div class="status" id="status">
+                <span class="status-icon">📍</span>
+                <span id="status-text">Waiting for location...</span>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <details>
+                <summary>How to Use</summary>
+                <ul>
+                    <li>Allow location access when prompted</li>
+                    <li>Hold your device flat (parallel to the ground)</li>
+                    <li>The red needle points to your selected destination</li>
+                    <li>Select from preset locations or enter custom coordinates</li>
+                    <li>For custom locations: Right-click on Google Maps and select coordinates to copy</li>
+                </ul>
+            </details>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
