@@ -3,14 +3,29 @@
 
 class CompassApp {
     constructor() {
-        // Points of Interest in Blue Ridge, Georgia
+        // Points of Interest in Blue Ridge, Georgia and surrounding areas
         this.locations = {
             north: { lat: 90, lng: 0, name: 'True North' },
+            // Blue Ridge Area
             hospital: { lat: 34.8642, lng: -84.3243, name: 'Blue Ridge Medical Center' },
             downtown: { lat: 34.8648, lng: -84.3241, name: 'Downtown Blue Ridge' },
             lake: { lat: 34.8847, lng: -84.3133, name: 'Lake Blue Ridge' },
             'scenic-railway': { lat: 34.8678, lng: -84.3258, name: 'Blue Ridge Scenic Railway' },
-            'toccoa-river': { lat: 34.8700, lng: -84.3300, name: 'Toccoa River' }
+            'toccoa-river': { lat: 34.8700, lng: -84.3300, name: 'Toccoa River' },
+            // Nearby Towns & Attractions
+            'ellijay': { lat: 34.6948, lng: -84.4826, name: 'Ellijay' },
+            'blue-ridge-lake-dam': { lat: 34.8794, lng: -84.3086, name: 'Blue Ridge Lake Dam' },
+            'morganton': { lat: 34.8668, lng: -84.2391, name: 'Morganton' },
+            'cherry-log': { lat: 34.7931, lng: -84.3796, name: 'Cherry Log' },
+            'mineral-bluff': { lat: 34.9373, lng: -84.3041, name: 'Mineral Bluff' },
+            'mccaysville': { lat: 34.9834, lng: -84.3752, name: 'McCaysville' },
+            'copperhill-tn': { lat: 35.0134, lng: -84.3710, name: 'Copperhill, TN' },
+            // Popular Destinations
+            'amicalola-falls': { lat: 34.5614, lng: -84.2497, name: 'Amicalola Falls State Park' },
+            'dahlonega': { lat: 34.5332, lng: -83.9843, name: 'Dahlonega' },
+            'helen': { lat: 34.7026, lng: -83.7277, name: 'Helen, GA' },
+            'brasstown-bald': { lat: 34.8740, lng: -83.8109, name: 'Brasstown Bald' },
+            'vogel-state-park': { lat: 34.7656, lng: -83.9331, name: 'Vogel State Park' }
         };
 
         this.currentLocation = null;
@@ -258,7 +273,12 @@ class CompassApp {
 
         // Calculate the angle the needle should point
         // Needle should point to target relative to device heading
-        const needleRotation = this.targetBearing - this.deviceHeading;
+        let needleRotation = this.targetBearing - this.deviceHeading;
+
+        // Normalize angle to take shortest path (-180 to 180)
+        // This prevents the needle from spinning all the way around
+        while (needleRotation > 180) needleRotation -= 360;
+        while (needleRotation < -180) needleRotation += 360;
 
         // Update needle rotation
         this.needle.style.transform = `translate(-50%, -100%) rotate(${needleRotation}deg)`;
