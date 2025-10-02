@@ -58,11 +58,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-.compass-rose {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
+
 
 .direction-marker {
     position: absolute;
@@ -97,6 +93,13 @@ h1 {
     transform: translateY(-50%);
 }
 
+.compass-rose {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.3s ease-out;
+}
+
 .needle {
     position: absolute;
     width: 4px;
@@ -109,7 +112,44 @@ h1 {
     z-index: 10;
 }
 
-.needle::before {
+/* North-pointing needle (white) */
+.needle-north {
+    z-index: 11;
+}
+
+.needle-north::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 60px solid #ffffff;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.needle-north::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 40px solid #666;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Destination 1 needle (red) */
+.needle-1 {
+    z-index: 12;
+}
+
+.needle-1::before {
     content: '';
     position: absolute;
     width: 0;
@@ -123,14 +163,46 @@ h1 {
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
-.needle::after {
+.needle-1::after {
     content: '';
     position: absolute;
     width: 0;
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-top: 50px solid #333;
+    border-top: 50px solid #991b1b;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Destination 2 needle (blue) */
+.needle-2 {
+    z-index: 13;
+}
+
+.needle-2::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 65px solid #2563eb;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.needle-2::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 45px solid #1e40af;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
@@ -156,6 +228,10 @@ h1 {
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
     margin-top: 10px;
+}
+
+.bearing-info-2 {
+    margin-top: 5px;
 }
 
 .info-item {

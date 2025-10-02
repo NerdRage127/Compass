@@ -5,7 +5,6 @@ class CompassApp {
     constructor() {
         // Points of Interest in Blue Ridge, Georgia and surrounding areas
         this.locations = {
-            north: { lat: 90, lng: 0, name: 'True North' },
             // Blue Ridge Area
             hospital: { lat: 34.8642, lng: -84.3243, name: 'Blue Ridge Medical Center' },
             downtown: { lat: 34.8648, lng: -84.3241, name: 'Downtown Blue Ridge' },
@@ -29,9 +28,9 @@ class CompassApp {
         };
 
         this.currentLocation = null;
-        this.targetLocation = null;
+        this.targetLocation1 = null;
+        this.targetLocation2 = null;
         this.deviceHeading = 0;
-        this.targetBearing = 0;
         this.watchId = null;
 
         this.initializeElements();
@@ -41,47 +40,89 @@ class CompassApp {
     }
 
     initializeElements() {
-        this.needle = document.getElementById('needle');
         this.compass = document.getElementById('compass');
-        this.directionElement = document.getElementById('direction');
-        this.bearingElement = document.getElementById('bearing');
-        this.distanceElement = document.getElementById('distance');
+        this.compassRose = document.getElementById('compass-rose');
+        this.needleNorth = document.getElementById('needle-north');
+        this.needle1 = document.getElementById('needle-1');
+        this.needle2 = document.getElementById('needle-2');
+        
+        this.direction1Element = document.getElementById('direction-1');
+        this.distance1Element = document.getElementById('distance-1');
+        this.time1Element = document.getElementById('time-1');
+        
+        this.direction2Element = document.getElementById('direction-2');
+        this.distance2Element = document.getElementById('distance-2');
+        this.time2Element = document.getElementById('time-2');
+        
         this.statusText = document.getElementById('status-text');
-        this.targetSelect = document.getElementById('target-select');
-        this.customLocationDiv = document.getElementById('custom-location');
-        this.customLatInput = document.getElementById('custom-lat');
-        this.customLngInput = document.getElementById('custom-lng');
-        this.setCustomButton = document.getElementById('set-custom');
+        
+        this.targetSelect1 = document.getElementById('target-select-1');
+        this.customLocationDiv1 = document.getElementById('custom-location-1');
+        this.customLatInput1 = document.getElementById('custom-lat-1');
+        this.customLngInput1 = document.getElementById('custom-lng-1');
+        this.setCustomButton1 = document.getElementById('set-custom-1');
+        
+        this.targetSelect2 = document.getElementById('target-select-2');
+        this.customLocationDiv2 = document.getElementById('custom-location-2');
+        this.customLatInput2 = document.getElementById('custom-lat-2');
+        this.customLngInput2 = document.getElementById('custom-lng-2');
+        this.setCustomButton2 = document.getElementById('set-custom-2');
     }
 
     setupEventListeners() {
-        this.targetSelect.addEventListener('change', () => this.handleTargetChange());
-        this.setCustomButton.addEventListener('click', () => this.setCustomLocation());
-        
-        // Handle Enter key in custom location inputs
-        this.customLatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.setCustomLocation();
+        this.targetSelect1.addEventListener('change', () => this.handleTargetChange(1));
+        this.setCustomButton1.addEventListener('click', () => this.setCustomLocation(1));
+        this.customLatInput1.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.setCustomLocation(1);
         });
-        this.customLngInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.setCustomLocation();
+        this.customLngInput1.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.setCustomLocation(1);
+        });
+        
+        this.targetSelect2.addEventListener('change', () => this.handleTargetChange(2));
+        this.setCustomButton2.addEventListener('click', () => this.setCustomLocation(2));
+        this.customLatInput2.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.setCustomLocation(2);
+        });
+        this.customLngInput2.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.setCustomLocation(2);
         });
     }
 
-    handleTargetChange() {
-        const selectedValue = this.targetSelect.value;
+    handleTargetChange(needleNum) {
+        const select = needleNum === 1 ? this.targetSelect1 : this.targetSelect2;
+        const customDiv = needleNum === 1 ? this.customLocationDiv1 : this.customLocationDiv2;
+        const selectedValue = select.value;
         
-        if (selectedValue === 'custom') {
-            this.customLocationDiv.style.display = 'block';
+        if (selectedValue === `custom-${needleNum}`) {
+            customDiv.style.display = 'block';
         } else {
-            this.customLocationDiv.style.display = 'none';
-            this.targetLocation = this.locations[selectedValue];
+            customDiv.style.display = 'none';
+            if (selectedValue === '') {
+                // No destination selected
+                if (needleNum === 1) {
+                    this.targetLocation1 = null;
+                } else {
+                    this.targetLocation2 = null;
+                }
+            } else {
+                const location = this.locations[selectedValue];
+                if (needleNum === 1) {
+                    this.targetLocation1 = location;
+                } else {
+                    this.targetLocation2 = location;
+                }
+            }
             this.updateCompass();
         }
     }
 
-    setCustomLocation() {
-        const lat = parseFloat(this.customLatInput.value);
-        const lng = parseFloat(this.customLngInput.value);
+    setCustomLocation(needleNum) {
+        const latInput = needleNum === 1 ? this.customLatInput1 : this.customLatInput2;
+        const lngInput = needleNum === 1 ? this.customLngInput1 : this.customLngInput2;
+        
+        const lat = parseFloat(latInput.value);
+        const lng = parseFloat(lngInput.value);
 
         if (isNaN(lat) || isNaN(lng)) {
             alert('Please enter valid coordinates');
@@ -93,14 +134,20 @@ class CompassApp {
             return;
         }
 
-        this.targetLocation = {
+        const location = {
             lat: lat,
             lng: lng,
-            name: 'Custom Location'
+            name: `Custom Location ${needleNum}`
         };
+        
+        if (needleNum === 1) {
+            this.targetLocation1 = location;
+        } else {
+            this.targetLocation2 = location;
+        }
 
         this.updateCompass();
-        this.updateStatus(`Target: Custom Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`);
+        this.updateStatus(`Destination ${needleNum}: Custom Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`);
     }
 
     requestLocation() {
@@ -128,9 +175,9 @@ class CompassApp {
             lng: position.coords.longitude
         };
 
-        // Set initial target to True North if none selected
-        if (!this.targetLocation) {
-            this.targetLocation = this.locations.north;
+        // Set initial target 1 to hospital if none selected
+        if (!this.targetLocation1) {
+            this.targetLocation1 = this.locations.hospital;
         }
 
         this.updateCompass();
@@ -224,7 +271,7 @@ class CompassApp {
 
     calculateDistance(lat1, lon1, lat2, lon2) {
         // Haversine formula for distance
-        const R = 6371; // Earth's radius in km
+        const R = 3959; // Earth's radius in miles (changed from km)
         const φ1 = lat1 * Math.PI / 180;
         const φ2 = lat2 * Math.PI / 180;
         const Δφ = (lat2 - lat1) * Math.PI / 180;
@@ -240,6 +287,24 @@ class CompassApp {
         
         return distance;
     }
+    
+    calculateDrivingTime(distanceMiles) {
+        // Average speed: 40 mph (considering mountain roads, traffic, etc.)
+        const avgSpeedMph = 40;
+        const hours = distanceMiles / avgSpeedMph;
+        const minutes = Math.round(hours * 60);
+        
+        if (minutes < 60) {
+            return `${minutes} min`;
+        } else {
+            const hrs = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            if (mins === 0) {
+                return `${hrs} hr`;
+            }
+            return `${hrs} hr ${mins} min`;
+        }
+    }
 
     getDirectionName(bearing) {
         const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
@@ -248,56 +313,101 @@ class CompassApp {
         return directions[index];
     }
 
-    formatDistance(km) {
-        if (km < 1) {
-            return `${Math.round(km * 1000)} m`;
-        } else if (km < 10) {
-            return `${km.toFixed(2)} km`;
+    formatDistance(miles) {
+        if (miles < 0.1) {
+            return `${Math.round(miles * 5280)} ft`;
+        } else if (miles < 10) {
+            return `${miles.toFixed(2)} mi`;
         } else {
-            return `${Math.round(km)} km`;
+            return `${Math.round(miles)} mi`;
         }
     }
 
     updateCompass() {
-        if (!this.currentLocation || !this.targetLocation) {
+        if (!this.currentLocation) {
             return;
         }
 
-        // Calculate bearing to target
-        this.targetBearing = this.calculateBearing(
-            this.currentLocation.lat,
-            this.currentLocation.lng,
-            this.targetLocation.lat,
-            this.targetLocation.lng
-        );
+        // Rotate compass rose to always point north (opposite of device heading)
+        let roseRotation = -this.deviceHeading;
+        this.compassRose.style.transform = `rotate(${roseRotation}deg)`;
 
-        // Calculate the angle the needle should point
-        // Needle should point to target relative to device heading
-        let needleRotation = this.targetBearing - this.deviceHeading;
+        // North needle always points to true north (0 degrees relative to compass rose)
+        // Since the rose rotates with device heading, the north needle stays at 0
+        this.needleNorth.style.transform = `translate(-50%, -100%) rotate(0deg)`;
 
-        // Normalize angle to take shortest path (-180 to 180)
-        // This prevents the needle from spinning all the way around
-        while (needleRotation > 180) needleRotation -= 360;
-        while (needleRotation < -180) needleRotation += 360;
-
-        // Update needle rotation
-        this.needle.style.transform = `translate(-50%, -100%) rotate(${needleRotation}deg)`;
-
-        // Update bearing info
-        this.bearingElement.textContent = `${Math.round(this.targetBearing)}°`;
-        this.directionElement.textContent = this.getDirectionName(this.targetBearing);
-
-        // Calculate and display distance (skip for True North)
-        if (this.targetLocation.lat !== 90) {
-            const distance = this.calculateDistance(
+        // Update destination 1
+        if (this.targetLocation1) {
+            const bearing1 = this.calculateBearing(
                 this.currentLocation.lat,
                 this.currentLocation.lng,
-                this.targetLocation.lat,
-                this.targetLocation.lng
+                this.targetLocation1.lat,
+                this.targetLocation1.lng
             );
-            this.distanceElement.textContent = this.formatDistance(distance);
+
+            // Calculate needle rotation relative to compass rose
+            let needleRotation1 = bearing1;
+            
+            // Normalize angle to take shortest path (-180 to 180)
+            while (needleRotation1 > 180) needleRotation1 -= 360;
+            while (needleRotation1 < -180) needleRotation1 += 360;
+
+            this.needle1.style.transform = `translate(-50%, -100%) rotate(${needleRotation1}deg)`;
+            this.needle1.style.display = 'block';
+
+            // Update info
+            this.direction1Element.textContent = this.getDirectionName(bearing1);
+            
+            const distance1 = this.calculateDistance(
+                this.currentLocation.lat,
+                this.currentLocation.lng,
+                this.targetLocation1.lat,
+                this.targetLocation1.lng
+            );
+            this.distance1Element.textContent = this.formatDistance(distance1);
+            this.time1Element.textContent = this.calculateDrivingTime(distance1);
         } else {
-            this.distanceElement.textContent = '--';
+            this.needle1.style.display = 'none';
+            this.direction1Element.textContent = '--';
+            this.distance1Element.textContent = '--';
+            this.time1Element.textContent = '--';
+        }
+
+        // Update destination 2
+        if (this.targetLocation2) {
+            const bearing2 = this.calculateBearing(
+                this.currentLocation.lat,
+                this.currentLocation.lng,
+                this.targetLocation2.lat,
+                this.targetLocation2.lng
+            );
+
+            // Calculate needle rotation relative to compass rose
+            let needleRotation2 = bearing2;
+            
+            // Normalize angle to take shortest path (-180 to 180)
+            while (needleRotation2 > 180) needleRotation2 -= 360;
+            while (needleRotation2 < -180) needleRotation2 += 360;
+
+            this.needle2.style.transform = `translate(-50%, -100%) rotate(${needleRotation2}deg)`;
+            this.needle2.style.display = 'block';
+
+            // Update info
+            this.direction2Element.textContent = this.getDirectionName(bearing2);
+            
+            const distance2 = this.calculateDistance(
+                this.currentLocation.lat,
+                this.currentLocation.lng,
+                this.targetLocation2.lat,
+                this.targetLocation2.lng
+            );
+            this.distance2Element.textContent = this.formatDistance(distance2);
+            this.time2Element.textContent = this.calculateDrivingTime(distance2);
+        } else {
+            this.needle2.style.display = 'none';
+            this.direction2Element.textContent = '--';
+            this.distance2Element.textContent = '--';
+            this.time2Element.textContent = '--';
         }
     }
 
