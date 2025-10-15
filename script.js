@@ -32,6 +32,10 @@ class CompassApp {
         this.targetLocation2 = null;
         this.deviceHeading = 0;
         this.watchId = null;
+        
+        // Track previous needle rotations for smooth animation
+        this.prevNeedleRotation1 = 0;
+        this.prevNeedleRotation2 = 0;
 
         this.initializeElements();
         this.setupEventListeners();
@@ -348,9 +352,18 @@ class CompassApp {
             // Calculate needle rotation relative to compass rose
             let needleRotation1 = bearing1;
             
-            // Normalize angle to take shortest path (-180 to 180)
-            while (needleRotation1 > 180) needleRotation1 -= 360;
-            while (needleRotation1 < -180) needleRotation1 += 360;
+            // Adjust angle to be closest to previous rotation (smooth animation)
+            let diff = needleRotation1 - this.prevNeedleRotation1;
+            while (diff > 180) {
+                needleRotation1 -= 360;
+                diff = needleRotation1 - this.prevNeedleRotation1;
+            }
+            while (diff < -180) {
+                needleRotation1 += 360;
+                diff = needleRotation1 - this.prevNeedleRotation1;
+            }
+            
+            this.prevNeedleRotation1 = needleRotation1;
 
             this.needle1.style.transform = `translate(-50%, -100%) rotate(${needleRotation1}deg)`;
             this.needle1.style.display = 'block';
@@ -385,9 +398,18 @@ class CompassApp {
             // Calculate needle rotation relative to compass rose
             let needleRotation2 = bearing2;
             
-            // Normalize angle to take shortest path (-180 to 180)
-            while (needleRotation2 > 180) needleRotation2 -= 360;
-            while (needleRotation2 < -180) needleRotation2 += 360;
+            // Adjust angle to be closest to previous rotation (smooth animation)
+            let diff = needleRotation2 - this.prevNeedleRotation2;
+            while (diff > 180) {
+                needleRotation2 -= 360;
+                diff = needleRotation2 - this.prevNeedleRotation2;
+            }
+            while (diff < -180) {
+                needleRotation2 += 360;
+                diff = needleRotation2 - this.prevNeedleRotation2;
+            }
+            
+            this.prevNeedleRotation2 = needleRotation2;
 
             this.needle2.style.transform = `translate(-50%, -100%) rotate(${needleRotation2}deg)`;
             this.needle2.style.display = 'block';
