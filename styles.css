@@ -1,0 +1,491 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 24px;
+    padding: 35px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 2em;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.subtitle {
+    color: #6c757d;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.compass-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.compass {
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffffff 0%, #e9ecef 50%, #dee2e6 100%);
+    position: relative;
+    box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.3),
+        0 5px 15px rgba(0, 0, 0, 0.2),
+        inset 0 1px 2px rgba(255, 255, 255, 0.8),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.1);
+    border: 3px solid #16213e;
+    margin-bottom: 20px;
+}
+
+
+
+.direction-marker {
+    position: absolute;
+    font-weight: 700;
+    font-size: 1.5em;
+    color: #16213e;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.direction-marker.north {
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #e63946;
+    font-size: 1.8em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.direction-marker.east {
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+}
+
+.direction-marker.south {
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.direction-marker.west {
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+}
+
+.compass-rose {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.3s ease-out;
+}
+
+.needle {
+    position: absolute;
+    width: 4px;
+    height: 120px;
+    top: 50%;
+    left: 50%;
+    transform-origin: center bottom;
+    transform: translate(-50%, -100%) rotate(0deg);
+    transition: transform 0.3s ease-out;
+    z-index: 10;
+}
+
+/* North-pointing needle (white) */
+.needle-north {
+    z-index: 11;
+}
+
+.needle-north::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 60px solid #ffffff;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.needle-north::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 40px solid #666;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Destination 1 needle (red) */
+.needle-1 {
+    z-index: 12;
+}
+
+.needle-1::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 70px solid #dc2626;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.needle-1::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 50px solid #991b1b;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Destination 2 needle (blue) */
+.needle-2 {
+    z-index: 13;
+}
+
+.needle-2::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-bottom: 65px solid #2563eb;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.needle-2::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 45px solid #1e40af;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.center-dot {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #16213e 0%, #0f3460 100%);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    border: 3px solid white;
+    box-shadow: 
+        0 0 0 2px rgba(22, 33, 62, 0.2),
+        0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.bearing-info {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.bearing-info-2 {
+    margin-top: 5px;
+}
+
+.info-item {
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 12px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid rgba(22, 33, 62, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.info-item .label {
+    display: block;
+    font-size: 0.75em;
+    color: #6c757d;
+    margin-bottom: 5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-item .value {
+    display: block;
+    font-size: 1.2em;
+    font-weight: 700;
+    background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.controls {
+    margin-bottom: 20px;
+}
+
+.control-section {
+    margin-bottom: 20px;
+}
+
+.control-section label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+
+select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid rgba(22, 33, 62, 0.2);
+    border-radius: 10px;
+    font-size: 1em;
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    color: #16213e;
+}
+
+select:focus {
+    outline: none;
+    border-color: #16213e;
+    box-shadow: 0 0 0 3px rgba(22, 33, 62, 0.1);
+}
+
+select:hover {
+    border-color: rgba(22, 33, 62, 0.3);
+}
+
+.coordinate-inputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.coordinate-inputs input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid rgba(22, 33, 62, 0.2);
+    border-radius: 10px;
+    font-size: 0.95em;
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    transition: all 0.2s ease;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    color: #16213e;
+}
+
+.coordinate-inputs input:focus {
+    outline: none;
+    border-color: #16213e;
+    box-shadow: 0 0 0 3px rgba(22, 33, 62, 0.1);
+}
+
+.coordinate-inputs input:hover {
+    border-color: rgba(22, 33, 62, 0.3);
+}
+
+.btn {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    box-shadow: 0 4px 8px rgba(22, 33, 62, 0.3);
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+    box-shadow: 0 6px 12px rgba(22, 33, 62, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 4px rgba(22, 33, 62, 0.3);
+}
+
+.map-link {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.map-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-size: 0.9em;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.map-link a:hover {
+    text-decoration: underline;
+}
+
+.status {
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid rgba(22, 33, 62, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.status-icon {
+    font-size: 1.2em;
+}
+
+#status-text {
+    font-size: 0.95em;
+    color: #666;
+}
+
+.info-panel {
+    margin-top: 20px;
+}
+
+.info-panel details {
+    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(22, 33, 62, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.info-panel summary {
+    cursor: pointer;
+    font-weight: 600;
+    background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    user-select: none;
+}
+
+.info-panel summary:hover {
+    opacity: 0.8;
+}
+
+.info-panel ul {
+    margin-top: 15px;
+    padding-left: 20px;
+}
+
+.info-panel li {
+    margin-bottom: 8px;
+    color: #666;
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .compass {
+        width: 240px;
+        height: 240px;
+    }
+
+    .needle {
+        height: 100px;
+    }
+
+    .bearing-info {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .coordinate-inputs {
+        flex-direction: column;
+    }
+}
+
+/* Animation for loading */
+@keyframes spin {
+    from {
+        transform: translate(-50%, -100%) rotate(0deg);
+    }
+    to {
+        transform: translate(-50%, -100%) rotate(360deg);
+    }
+}
+
+.compass.loading .needle {
+    animation: spin 2s linear infinite;
+}

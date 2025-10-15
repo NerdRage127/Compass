@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Compass - Blue Ridge Navigator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Compass Navigator</h1>
+            <p class="subtitle">Blue Ridge, Georgia</p>
+        </header>
+
+        <div class="compass-container">
+            <div class="compass" id="compass">
+                <div class="compass-rose" id="compass-rose">
+                    <div class="direction-marker north">N</div>
+                    <div class="direction-marker east">E</div>
+                    <div class="direction-marker south">S</div>
+                    <div class="direction-marker west">W</div>
+                </div>
+                <div class="needle needle-north" id="needle-north"></div>
+                <div class="needle needle-1" id="needle-1"></div>
+                <div class="needle needle-2" id="needle-2"></div>
+                <div class="center-dot"></div>
+            </div>
+            <div class="bearing-info">
+                <div class="info-item">
+                    <span class="label">Direction 1:</span>
+                    <span class="value" id="direction-1">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Distance 1:</span>
+                    <span class="value" id="distance-1">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Drive Time 1:</span>
+                    <span class="value" id="time-1">--</span>
+                </div>
+            </div>
+            <div class="bearing-info bearing-info-2">
+                <div class="info-item">
+                    <span class="label">Direction 2:</span>
+                    <span class="value" id="direction-2">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Distance 2:</span>
+                    <span class="value" id="distance-2">--</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Drive Time 2:</span>
+                    <span class="value" id="time-2">--</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="control-section">
+                <label for="target-select-1">Destination 1 (Red Needle):</label>
+                <select id="target-select-1">
+                    <option value="">-- None --</option>
+                    <optgroup label="Blue Ridge Area">
+                        <option value="hospital" selected>Blue Ridge Medical Center</option>
+                        <option value="downtown">Downtown Blue Ridge</option>
+                        <option value="lake">Lake Blue Ridge</option>
+                        <option value="scenic-railway">Blue Ridge Scenic Railway</option>
+                        <option value="toccoa-river">Toccoa River</option>
+                        <option value="blue-ridge-lake-dam">Blue Ridge Lake Dam</option>
+                    </optgroup>
+                    <optgroup label="Nearby Towns">
+                        <option value="morganton">Morganton</option>
+                        <option value="cherry-log">Cherry Log</option>
+                        <option value="mineral-bluff">Mineral Bluff</option>
+                        <option value="mccaysville">McCaysville</option>
+                        <option value="copperhill-tn">Copperhill, TN</option>
+                        <option value="ellijay">Ellijay</option>
+                    </optgroup>
+                    <optgroup label="Popular Destinations">
+                        <option value="amicalola-falls">Amicalola Falls State Park</option>
+                        <option value="brasstown-bald">Brasstown Bald</option>
+                        <option value="vogel-state-park">Vogel State Park</option>
+                        <option value="dahlonega">Dahlonega</option>
+                        <option value="helen">Helen, GA</option>
+                    </optgroup>
+                    <option value="custom-1">Custom Location</option>
+                </select>
+            </div>
+
+            <div id="custom-location-1" class="control-section" style="display: none;">
+                <label>Enter Coordinates for Destination 1:</label>
+                <div class="coordinate-inputs">
+                    <input type="number" id="custom-lat-1" placeholder="Latitude" step="0.000001" min="-90" max="90">
+                    <input type="number" id="custom-lng-1" placeholder="Longitude" step="0.000001" min="-180" max="180">
+                    <button id="set-custom-1" class="btn">Set Location</button>
+                </div>
+                <div class="map-link">
+                    <a href="https://www.google.com/maps" target="_blank" rel="noopener">
+                        📍 Open Map to Get Coordinates
+                    </a>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <label for="target-select-2">Destination 2 (Blue Needle):</label>
+                <select id="target-select-2">
+                    <option value="" selected>-- None --</option>
+                    <optgroup label="Blue Ridge Area">
+                        <option value="hospital">Blue Ridge Medical Center</option>
+                        <option value="downtown">Downtown Blue Ridge</option>
+                        <option value="lake">Lake Blue Ridge</option>
+                        <option value="scenic-railway">Blue Ridge Scenic Railway</option>
+                        <option value="toccoa-river">Toccoa River</option>
+                        <option value="blue-ridge-lake-dam">Blue Ridge Lake Dam</option>
+                    </optgroup>
+                    <optgroup label="Nearby Towns">
+                        <option value="morganton">Morganton</option>
+                        <option value="cherry-log">Cherry Log</option>
+                        <option value="mineral-bluff">Mineral Bluff</option>
+                        <option value="mccaysville">McCaysville</option>
+                        <option value="copperhill-tn">Copperhill, TN</option>
+                        <option value="ellijay">Ellijay</option>
+                    </optgroup>
+                    <optgroup label="Popular Destinations">
+                        <option value="amicalola-falls">Amicalola Falls State Park</option>
+                        <option value="brasstown-bald">Brasstown Bald</option>
+                        <option value="vogel-state-park">Vogel State Park</option>
+                        <option value="dahlonega">Dahlonega</option>
+                        <option value="helen">Helen, GA</option>
+                    </optgroup>
+                    <option value="custom-2">Custom Location</option>
+                </select>
+            </div>
+
+            <div id="custom-location-2" class="control-section" style="display: none;">
+                <label>Enter Coordinates for Destination 2:</label>
+                <div class="coordinate-inputs">
+                    <input type="number" id="custom-lat-2" placeholder="Latitude" step="0.000001" min="-90" max="90">
+                    <input type="number" id="custom-lng-2" placeholder="Longitude" step="0.000001" min="-180" max="180">
+                    <button id="set-custom-2" class="btn">Set Location</button>
+                </div>
+                <div class="map-link">
+                    <a href="https://www.google.com/maps" target="_blank" rel="noopener">
+                        📍 Open Map to Get Coordinates
+                    </a>
+                </div>
+            </div>
+
+            <div class="status" id="status">
+                <span class="status-icon">📍</span>
+                <span id="status-text">Waiting for location...</span>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <details>
+                <summary>How to Use</summary>
+                <ul>
+                    <li>Allow location access when prompted</li>
+                    <li>Hold your device flat (parallel to the ground)</li>
+                    <li>The compass rose rotates to always point north</li>
+                    <li>The white needle always points to true north</li>
+                    <li>The red needle points to Destination 1 (if selected)</li>
+                    <li>The blue needle points to Destination 2 (if selected)</li>
+                    <li>Distance shown in miles with estimated driving time</li>
+                    <li>Select from preset locations or enter custom coordinates</li>
+                    <li>For custom locations: Right-click on Google Maps and select coordinates to copy</li>
+                </ul>
+            </details>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
